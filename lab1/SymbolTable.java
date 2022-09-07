@@ -77,6 +77,11 @@ public class SymbolTable {
      * TODO: implement the put method.
      */
     public void put(String key, Character val) {
+
+    	if(size() >= maxSize) {
+    		System.out.println("Table full");
+    		return;
+    	}
     	
     	//Hasha nyckeln, ger oss ett index
     	int index = hash(key);
@@ -85,14 +90,22 @@ public class SymbolTable {
     	if(keys[index] == null) {
     		keys[index] = key;
     		vals[index] = val;
+    		size++;
     		
-    	}else {		//Om det inte går -> utför linjär sondering(gå vidare tills det finns en ledig plats)
+    	}else if(keys[index].equals(key)){
+    		//byt ut den nuvarande värdet
+    		vals[index] = val;
+    
+    		
+    	//Om det inte går -> utför linjär sondering(gå vidare tills det finns en ledig plats)
+    	}else {
     		while (keys[index] != null) {
     			index = (index +1) % maxSize;
     		}
     		//Antar att platsen vi är på är ledig
     		keys[index] = key;
     		vals[index] = val;
+    		size++;
     		
     	}
     	
@@ -146,16 +159,16 @@ public class SymbolTable {
     	keys[index] = null;
     	vals[index] = null;
     	index = (index+1) % maxSize; 
+    	size--;
     	
-    	while(keys[index] != null) {
+    	while(keys[index] != null) {				//Hashar om alla bakom med linjär sondering
     	 String tmpKey = keys[index];
     	 Character tmpVal = vals[index];
     	 keys[index] = null;
     	 vals[index] = null;
     	 put(tmpKey, tmpVal);
     	 index = (index+1) % maxSize; 
-    	 
-    	 
+    	  
     	}
     	
     	
