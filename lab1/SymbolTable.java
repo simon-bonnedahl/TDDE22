@@ -77,9 +77,13 @@ public class SymbolTable {
      * TODO: implement the put method.
      */
     public void put(String key, Character val) {
-
+    	
+    	//Kolla så att vi får in en giltig nyckel
+    	if(key.length() <= 0) {
+    		return;
+    	}
+    	//Kolla så att tabellen inte är full
     	if(size() >= maxSize) {
-    		System.out.println("Table full");
     		return;
     	}
     	
@@ -109,11 +113,6 @@ public class SymbolTable {
     		
     	}
     	
-    	
-    	
-    	
-    	
-    	
 	return;
     } 
     public int getKeyIndex(String key) {
@@ -121,7 +120,9 @@ public class SymbolTable {
     	int index = hash(key);
     	
     	//Kolla på indexet, stämmer nyckeln på platsen med den vi söker med
-    	
+    	if (keys[index] == null) {
+    		return -1;
+    	}
     	if (keys[index].equals(key)) {		//Om ja -> returnera vals[index]
     		return index;
     		
@@ -142,7 +143,9 @@ public class SymbolTable {
      * TODO: implement the get method.
      */
     public Character get(String key) {
-    	
+    	if(getKeyIndex(key) == -1) {
+    		return null;
+    	}
     	return vals[getKeyIndex(key)];
     	
 
@@ -155,6 +158,9 @@ public class SymbolTable {
     public void delete(String key) {
     	
     	int index = getKeyIndex(key);
+    	if(index == -1) {
+    		return;
+    	}
     	
     	keys[index] = null;
     	vals[index] = null;
