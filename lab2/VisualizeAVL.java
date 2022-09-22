@@ -1,5 +1,3 @@
-package TDDE22.lab2;
-
 import org.w3c.dom.Node;
 
 import java.awt.*;
@@ -161,7 +159,6 @@ public class VisualizeAVL extends JPanel implements ActionListener {
         strMenu += "h : Height of key" + newline;
         strMenu += "q : Quit program" + newline;
         strMenu += "x : show this text" + newline;
-        strMenu += "r : rotate" + newline;
         System.out.print(strMenu);
     }
 

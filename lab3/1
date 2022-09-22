@@ -1,0 +1,9 @@
+: 1663586748:0;ls
+: 1663586751:0;code .
+: 1663586808:0;javac Brute.java
+: 1663586812:0;java Brute 100
+: 1663586828:0;java Brute data/input1.txt
+: 1663586836:0;java Brute data/input100.txt
+: 1663586865:0;java Brute data/input150.txt
+: 1663586896:0;java Brute data/input2000.txt
+: 1663586950:0;java Brute data/input8000.txt

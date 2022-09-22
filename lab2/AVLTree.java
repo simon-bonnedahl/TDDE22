@@ -1,5 +1,3 @@
-package TDDE22.lab2;
-
 import java.util.Objects;
 
 /**

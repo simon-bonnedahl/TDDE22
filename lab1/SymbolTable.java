@@ -79,11 +79,18 @@ public class SymbolTable {
     public void put(String key, Character val) {
     	
     	//Kolla så att vi får in en giltig nyckel
-    	if(key.length() <= 0) {
+    	if(key.length() == 0) {
     		return;
     	}
+  
+    	
     	//Kolla så att tabellen inte är full
     	if(size() >= maxSize) {
+    		int index = hash(key);
+    		if(keys[index].equals(key)) {
+    			vals[index] = val;
+    			return;
+    		}
     		return;
     	}
     	
@@ -91,13 +98,16 @@ public class SymbolTable {
     	int index = hash(key);
     	
     	//Testa stoppa in på det indexet
-    	if(keys[index] == null) {
+    	if(keys[index] == null && val != null) {
     		keys[index] = key;
     		vals[index] = val;
     		size++;
     		
     	}else if(keys[index].equals(key)){
     		//byt ut den nuvarande värdet
+    		if(val == null) {
+    			delete(key);
+    		}
     		vals[index] = val;
     
     		
@@ -107,9 +117,11 @@ public class SymbolTable {
     			index = (index +1) % maxSize;
     		}
     		//Antar att platsen vi är på är ledig
-    		keys[index] = key;
-    		vals[index] = val;
-    		size++;
+    		if(val != null) {	
+	    		keys[index] = key;
+	    		vals[index] = val;
+	    		size++;
+    		}
     		
     	}
     	
@@ -123,6 +135,7 @@ public class SymbolTable {
     	if (keys[index] == null) {
     		return -1;
     	}
+    	
     	if (keys[index].equals(key)) {		//Om ja -> returnera vals[index]
     		return index;
     		
@@ -158,10 +171,13 @@ public class SymbolTable {
     public void delete(String key) {
     	
     	int index = getKeyIndex(key);
+    	
+    	//det finns inget på platsen
     	if(index == -1) {
     		return;
     	}
     	
+    	//Om det finns något på platsen så sätter vi det till null, minskar storleken och hoppar vidare och hashar om nästa nyckel
     	keys[index] = null;
     	vals[index] = null;
     	index = (index+1) % maxSize; 
@@ -172,14 +188,12 @@ public class SymbolTable {
     	 Character tmpVal = vals[index];
     	 keys[index] = null;
     	 vals[index] = null;
+    	 size--;									//Kompletering
     	 put(tmpKey, tmpVal);
     	 index = (index+1) % maxSize; 
     	  
     	}
-    	
-    	
-    	
-    	
+    	 	
 	return;
     } 
 
