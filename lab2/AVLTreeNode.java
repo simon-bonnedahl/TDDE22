@@ -122,7 +122,7 @@ public class AVLTreeNode<T extends Comparable<T>> {
 		if(leftNodeWeight > rightNodeWeight) {//Obalans åt vänster
 			
 			//Har vår vänstra nod en höger eller vänster nod?
-			if(left.left != null) {
+			if(nodeHeight(left.left) > nodeHeight(left.right)) {
 				//enkel rotation
 				return singleRotationWithLeftChild(this);
 			}else {
@@ -133,7 +133,7 @@ public class AVLTreeNode<T extends Comparable<T>> {
 		}else {//Obalans åt höger
 			
 			//Har vår högra nod en höger eller vänster nod?
-			if(right.right != null) {
+			if(nodeHeight(right.right) > nodeHeight(right.left)) {
 				//enkel rotation
 				return singleRotationWithRightChild(this);
 				

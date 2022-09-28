@@ -1,5 +1,7 @@
 package TDDE22.lab1;
 
+//TODO: Komplettering. Storleken på er hashtabell fungerar inte som
+//den ska vid större tabllstorlekar.
 
 /** 
  * This class represents a symbol table, or hash table, with a very
@@ -76,17 +78,28 @@ public class SymbolTable {
      * Insert the key-value pair into the symbol table.
      * TODO: implement the put method.
      */
+
+    //TODO: Komplettering. Ni bör enbart behöva anropa hashfunktionen
+    //en gång per funktion.
+    
     public void put(String key, Character val) {
+    	
+    	
     	
     	//Kolla så att vi får in en giltig nyckel
     	if(key.length() == 0) {
     		return;
     	}
+    	int index = hash(key);
   
-    	
-    	//Kolla så att tabellen inte är full
+    	//TODO: Komplettering. Vad händer om nyckeln finns, men ligger
+    	//senare i kollisionskedjan (gäller både om tabellen är full
+    	//och om den inte är det)?
+
+	//Kolla så att tabellen inte är
+    	//full
     	if(size() >= maxSize) {
-    		int index = hash(key);
+    		
     		if(keys[index].equals(key)) {
     			vals[index] = val;
     			return;
@@ -94,10 +107,16 @@ public class SymbolTable {
     		return;
     	}
     	
-    	//Hasha nyckeln, ger oss ett index
-    	int index = hash(key);
-    	
-    	//Testa stoppa in på det indexet
+ 
+
+	// TODO: Kommentar. Det går att lösa detta med en loop utan
+    	//att ha behandla vissa fall innan loopen. Fundera också kring
+    	//valet av loop. Det finns en risk att fastna i en evig loop
+    	//(om tabellen blir full när ni använder er av while), vilket
+    	//är viktigt att ta hänsyn till när while-loopar används i den
+    	//här typen av implementationer.
+	
+	//Testa stoppa in på det indexet
     	if(keys[index] == null && val != null) {
     		keys[index] = key;
     		vals[index] = val;
@@ -107,8 +126,9 @@ public class SymbolTable {
     		//byt ut den nuvarande värdet
     		if(val == null) {
     			delete(key);
-    		}
+    		}else {
     		vals[index] = val;
+    		}
     
     		
     	//Om det inte går -> utför linjär sondering(gå vidare tills det finns en ledig plats)
@@ -129,24 +149,37 @@ public class SymbolTable {
     } 
     public int getKeyIndex(String key) {
     	
-    	int index = hash(key);
+    	int startIndex = hash(key);
+    	int index;
     	
     	//Kolla på indexet, stämmer nyckeln på platsen med den vi söker med
-    	if (keys[index] == null) {
+    	if (keys[startIndex] == null) {
     		return -1;
     	}
     	
-    	if (keys[index].equals(key)) {		//Om ja -> returnera vals[index]
-    		return index;
+    	if (keys[startIndex].equals(key)) {		//Om ja -> returnera vals[index]
+    		return startIndex;
     		
     	}else {	//om nej -> gör linjär sondering
     		
+    		
+    		for(int i = startIndex; i< startIndex+maxSize; i++) {
+    			index = i % maxSize;
+    			
+    			if(keys[index] == null){
+    				return index;
+    			}
+    		}
+    		return -1;
+    		
+    		/*
     		while (keys[index] != null && !keys[index].equals(key)) {
     			
     			index = (index+1) % maxSize; 
     		}
     		
     		return index;
+    		*/
     	}
     	
     }
@@ -155,6 +188,9 @@ public class SymbolTable {
      * value.
      * TODO: implement the get method.
      */
+    // TODO: Komplettering. Eftersom det är två anrop till er funktion
+    // getKeyIndex kommer hela den funktionen att köras två gånger i
+    // värsta fallet. Går detta att undvika?
     public Character get(String key) {
     	if(getKeyIndex(key) == -1) {
     		return null;
