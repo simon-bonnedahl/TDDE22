@@ -16,7 +16,7 @@ public class Test {
 		st.put("het", 'c');
 		st.put("the", 'd');
 
-		
+	
 		if(st.get("the").equals('d')) {
 			System.out.println("Test 2 ok ☑️");
 			System.out.println();
