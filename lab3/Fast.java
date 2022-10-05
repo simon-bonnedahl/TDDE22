@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
-import java.util.Arrays;
 
 /**
  * Brute force solution. To run: java brute.java < input.txt
@@ -22,11 +21,6 @@ public class Fast {
      * @param points - The points to render.
      */
 
-    private static Point originPoint;
-
-    private static void setOriginPoint(Point p){
-        originPoint = p;
-    }
 
     private static void render(JFrame frame, ArrayList<Point> points) {
         frame.removeAll();
@@ -112,38 +106,31 @@ public class Fast {
         //Sortera alla andra punkter utifrån lutningen de har gentemot P
         //Kontrollera om tre eller flera punkter ligger på samma linje som p
         //System.out.println(Arrays.toString(points.toArray()));
+        ArrayList<Point> slopesToOrigin = new ArrayList<>();
+        slopesToOrigin.addAll(points);
         for(int i = 0; i< points.size(); i++){
-            ArrayList<Point> slopesToOrigin = new ArrayList<>();
-            setOriginPoint(points.get(i));
-            //System.out.print("CHANING ORIGINPOINT TO: ");
-            //originPoint.printLocation();
-            for(int j = i+1; j < points.size(); j++){
-                slopesToOrigin.add(points.get(j));
+            Point origin = points.get(i);
+            slopesToOrigin.remove(origin);
+            //ArrayList<Point> slopesToOrigin = new ArrayList<>();
 
-            }
-            /*for(Point slope : slopesToOrigin){
-                slope.printSlopeTo(originPoint);
-            }*/
-            Collections.sort(slopesToOrigin, new SlopeOrder());     //Sorterar punkterna utifrån deras lutningskofficient till originPoint
-            //System.out.print("After sorting: ");
-            /*for(Point slope : slopesToOrigin){
-                slope.printSlopeTo(originPoint);
-            }*/
+            //for(int j = i+1; j < points.size(); j++){       //Kopierar arrayen men utesluter de "i" punkter vi har besökt innan.
+               // slopesToOrigin.add(points.get(j));
+            //}
+
+            Collections.sort(slopesToOrigin, new SlopeOrder(origin));     //Sorterar punkterna utifrån deras lutningskofficient till originPoint
+         
            
-            int matches = 0;
+            int matches = 1;
             for(int j = 1; j< slopesToOrigin.size(); j++){
                 
-                if(originPoint.slopeTo(slopesToOrigin.get(j-1)) == originPoint.slopeTo(slopesToOrigin.get(j))){
+                if(origin.slopeTo(slopesToOrigin.get(j-1)) == origin.slopeTo(slopesToOrigin.get(j))){
                   matches++;
-                  //System.out.println("MATCH: " + matches);
-                  //slopesToOrigin.get(j-1).printLocation();
-                  //slopesToOrigin.get(j).printLocation();
-                  if(matches == 2){
-                    //System.out.println("RENDERING LINE");
+                  if(matches == 3){
+                    //Behöver vi kolla om det finns ytterligare fler på rad?
                     renderLine(frame, points.get(i), slopesToOrigin.get(j));
                   }
                 }else{
-                    matches = 0;
+                    matches = 1;
                 }
 
             }
@@ -174,26 +161,31 @@ public class Fast {
 
     private static class SlopeOrder implements Comparator<Point>
 	{   
-     
-		public int compare(Point point1, Point point2)
+        Point origin;
+        public SlopeOrder(Point o){
+            origin = o;
+        }
+		public int compare(Point a, Point b)
 		{
-			double m1 = originPoint.slopeTo(point1);
-            double m2 = originPoint.slopeTo(point2);
-			int result;
+			double k1 = origin.slopeTo(a);
+            double k2 = origin.slopeTo(b);
 
-			if(m1 == m2)
+			if(k1 == k2)
 			{
-				result =  0;
+				if(a.greaterThan(b)){
+                    return 1;
+                }else{
+                    return -1;
+                }
 			}
-			else if(m1 < m2)
+			else if(k1 < k2)
 			{
-				result =  -1;
+				return -1;
 			}
 			else
 			{
-				result = 1;
+				return 1;
 			}
-			return result;
 		}
 	}
 }

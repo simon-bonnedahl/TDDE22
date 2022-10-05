@@ -77,6 +77,7 @@ public class MinPQ<Key_Class> {
      * @param  x the key to be added to the queue.
      */
     public void insert(Key_Class x) {
+        /* 
         if (count == pq.length - 1) {
 	        resize(2 * pq.length);
 	    }
@@ -89,6 +90,11 @@ public class MinPQ<Key_Class> {
         }
         count++;
         orderOK = true;
+        */
+        toss(x);
+        swim(count);
+        orderOK = true;
+
     }
 
     int parentOf(int index) {
@@ -110,7 +116,7 @@ public class MinPQ<Key_Class> {
 	if (!orderOK) {
 	    fixHeap();
 	}
-    System.out.println("DEL: " + pq[count] );;
+    //System.out.println("DEL: " + pq[count] );;
 	Key_Class min = pq[1];
 	swap_indexes(1, count--);
 	sink(1);
