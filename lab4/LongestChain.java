@@ -38,24 +38,27 @@ class LongestChain {
      * @param x - the word of origin (WordRec)
      * @return the goal word if it's found, null otherwise (WordRec)
      */ 
-    private WordRec makeChildren(WordRec x) {
-	for (int i = 0; i < wordLength; i++) {
-	    for (int c = 0; c < alphabetLength; c++) {
-		if (alphabet[c] != x.getWord().charAt(i)) {
-		    String res = WordList.contains(x.getWord().substring(0,i) +
-						   alphabet[c] +
-						   x.getWord().substring(i+1));
-		    if (res != null && WordList.markAsUsedIfUnused(res)) {
-			WordRec wr = new WordRec(res, x);
-			wr.printChain();
-			if (isGoal(res)) {
-			    return wr;
-			}
-			q.enqueue(wr);
-		    }
+	private WordRec makeChildren(WordRec x) {
+		char[] chars = x.getWord().toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+	   		for (int c = 0; c < alphabetLength; c++) {
+				if (alphabet[c] != chars[i]) {
+					char tempChar = chars[i];
+					chars[i]=alphabet[c];
+			
+					String res = WordList.contains(new String(chars));
+					
+					chars[i] = tempChar;
+					if (res != null && WordList.markAsUsedIfUnused(res)) {
+						WordRec wr = new WordRec(res, x);
+						if (isGoal(res)) {
+							return wr;
+						}
+						q.enqueue(wr);
+					}
+				}
+	    	}
 		}
-	    }
-	}
 	return null;
     }
 

@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.io.*;
 
@@ -7,8 +7,9 @@ import java.io.*;
  * containing already used words.
  */
 class WordList {
-    static private ArrayList<String> list; // ordlista, bytt från vector
+    static private HashSet<String> list; // ordlista, bytt från vector
     static private HashSet<String> used; // databas med använda ord, bytt från vector
+                                        //Kan använda HashMap istället
     static int wordLength;
     static int size; // antal ord i ordlistan
 
@@ -24,7 +25,7 @@ class WordList {
     static public void read(int wordLength_, BufferedReader input) throws IOException {
 	wordLength = wordLength_;
 	size = 0;
-	list = new ArrayList<String>();
+	list = new HashSet<String>();
 	while (true) {
 	    String s = input.readLine();
 	    if (s.equals("#")) {
@@ -50,17 +51,12 @@ class WordList {
      * @return - the word located at the index in question, if it
      * exists. If it doesn't exist, null is returned (String)
      */
-    static public String wordAt(int index) {
-	if (index >= 0 && index < size) {
-	    return (String) list.get(index);
-	}
-	return null;
-    }
+ 
 
     /**
      * Contains finds w in the word list and returns it back if the
      * word exists, otherwise null is returned.
-     *
+     *🥹
      * @param w - The word we are looking for (String)
      * @return - w if the word exists, otherwise null is returned
      * (String)
